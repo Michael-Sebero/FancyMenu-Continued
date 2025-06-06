@@ -1023,7 +1023,7 @@ public class MenuHandlerBase {
 								path = Minecraft.getMinecraft().mcDataDir.getAbsolutePath().replace("\\", "/") + "/" + path;
 								f = new File(path);
 							}
-							if (f.exists() && f.isFile() && (f.getName().endsWith(".flac") || f.getName().endsWith(".mp3") || f.getName().endsWith(".wav") || f.getName().endsWith(".opus"))) {
+							if (f.isFile() && f.exists() && f.getName().endsWith(".wav")) {
 								try {
 									String name = path + Files.size(f.toPath());
 									MenuCustomization.registerSound(name, path);
@@ -1046,7 +1046,7 @@ public class MenuHandlerBase {
 						path = Minecraft.getMinecraft().mcDataDir.getAbsolutePath().replace("\\", "/") + "/" + path;
 						f = new File(path);
 					}
-					if (f.exists() && f.isFile() && (f.getName().endsWith(".flac") || f.getName().endsWith(".mp3") || f.getName().endsWith(".wav") || f.getName().endsWith(".opus"))) {
+					if (f.isFile() && f.exists() && f.getName().endsWith(".wav")) {
 						try {
 							String name = "closesound_" + path + Files.size(f.toPath());
 							MenuCustomization.registerSound(name, path);
@@ -1068,7 +1068,7 @@ public class MenuHandlerBase {
 							path = Minecraft.getMinecraft().mcDataDir.getAbsolutePath().replace("\\", "/") + "/" + path;
 							f = new File(path);
 						}
-						if (f.exists() && f.isFile() && (f.getName().endsWith(".flac") || f.getName().endsWith(".mp3") || f.getName().endsWith(".wav") || f.getName().endsWith(".opus"))) {
+						if (f.isFile() && f.exists() && f.getName().endsWith(".wav")) {
 							try {
 								String name = "opensound_" + path + Files.size(f.toPath());
 								MenuCustomization.registerSound(name, path);
@@ -1536,7 +1536,7 @@ public class MenuHandlerBase {
 							c.clickSound = Minecraft.getMinecraft().mcDataDir.getAbsolutePath().replace("\\", "/") + "/" + c.clickSound;
 							f = new File(c.clickSound);
 						}
-						if (f.exists() && f.isFile() && (f.getName().endsWith(".flac") || f.getName().endsWith(".mp3") || f.getName().endsWith(".wav") || f.getName().endsWith(".opus"))) {
+						if (f.exists() && f.isFile() && f.getPath().toLowerCase().endsWith(".wav")) {
 
 							SoundHandler.registerSound(f.getPath(), f.getPath());
 							SoundHandler.resetSound(f.getPath());

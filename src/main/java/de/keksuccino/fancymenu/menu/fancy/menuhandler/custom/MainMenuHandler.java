@@ -163,6 +163,12 @@ public class MainMenuHandler extends MenuHandlerBase {
 									this.showRealmsNotification = !(i.hidden);
 								}
 							}
+							//Forge -------------->
+							if (elementId.equals("title_screen_forge_copyright")) {
+								if (this.showForgeNotificationCopyright) {
+									this.showForgeNotificationCopyright = !(i.hidden);
+								}
+							}
 							if (elementId.equals("title_screen_forge_top")) {
 								if (this.showForgeNotificationTop) {
 									this.showForgeNotificationTop = !(i.hidden);
@@ -247,6 +253,48 @@ public class MainMenuHandler extends MenuHandlerBase {
 			
 			renderForgeNotifications((GuiMainMenu) e.getGui(), font, e.getGui().width, e.getGui().height);
 			
+			//Draw and handle copyright
+			String c = "Copyright Mojang AB. Do not distribute!";
+			String cPos = FancyMenu.config.getOrDefault("copyrightposition", "bottom-right");
+			int cX = 0;
+			int cY = 0;
+			int cW = Minecraft.getMinecraft().fontRenderer.getStringWidth(c);
+			int cH = 10;
+			
+			if (cPos.equalsIgnoreCase("top-left")) {
+				cX = 2;
+				cY = 2;
+			} else if (cPos.equalsIgnoreCase("top-centered")) {
+				cX = (width / 2) - (cW / 2);
+				cY = 2;
+			} else if (cPos.equalsIgnoreCase("top-right")) {
+				cX = width - cW - 2;
+				cY = 2;
+			} else if (cPos.equalsIgnoreCase("bottom-left")) {
+				cX = 2;
+				cY = height - cH - 2;
+			} else if (cPos.equalsIgnoreCase("bottom-centered")) {
+				cX = (width / 2) - (cW / 2);
+				cY = height - cH - 2;
+			} else {
+				cX = width - cW - 2;
+				cY = height - cH - 2;
+			}
+			
+			Color copyrightcolor = RenderUtils.getColorFromHexString(FancyMenu.config.getOrDefault("copyrightcolor", "#ffffff"));
+			if (copyrightcolor == null) {
+				copyrightcolor = new Color(255, 255, 255);
+			}
+			
+			e.getGui().drawString(font, c, cX, cY, copyrightcolor.getRGB() | 255 << 24);
+			
+			if ((mouseX >= cX) && (mouseX <= cX + cW) && (mouseY >= cY) && (mouseY <= cY + cH)) {
+				Gui.drawRect(cX, cY + cH - 1, cX + cW, cY + cH, -1);
+				
+				if (MouseInput.isLeftMouseDown()) {
+					Minecraft.getMinecraft().displayGuiScreen(new GuiWinGame(false, Runnables.doNothing()));
+				}
+			}
 
 			if (!PopupHandler.isPopupActive()) {
 				this.renderButtonsAndLabels(e, mouseX, mouseY);
@@ -273,6 +321,19 @@ public class MainMenuHandler extends MenuHandlerBase {
 				gui.drawString(font, line, (width - font.getStringWidth(line)) / 2, 4 + (0 * (font.FONT_HEIGHT + 1)), -1);
 				line = I18n.format("forge.update.beta.2");
 				gui.drawString(font, line, (width - font.getStringWidth(line)) / 2, 4 + (1 * (font.FONT_HEIGHT + 1)), -1);
+			}
+		}
+
+		String line = null;
+		switch(status) {
+			case OUTDATED:
+			case BETA_OUTDATED: line = I18n.format("forge.update.newversion", ForgeVersion.getTarget()); break;
+			default: break;
+		}
+		if (line != null) {
+			// if we have a line, render it in the bottom right, above Mojang's copyright line
+			if (this.showForgeNotificationCopyright) {
+				gui.drawString(font, line, width - font.getStringWidth(line) - 2, height - (2 * (font.FONT_HEIGHT + 1)), -1);
 			}
 		}
 
